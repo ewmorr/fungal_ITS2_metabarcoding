@@ -1,6 +1,6 @@
-### A bioinformatic pipeline for processing fungal ITS sequence data from MiSeq dual-index metabarcoding sequencing projects
+## A bioinformatic pipeline for processing fungal ITS sequence data from MiSeq dual-index metabarcoding sequencing projects
 
-#### Author: Eric W. Morrison, 7/1/2015, revised 10/2/2015
+### Author: Eric W. Morrison, 7/1/2015, revised 10/2/2015
 
 Description: Pipeline for processing MiSeq paired-end read data for fungal meta-barcoding experiments. Data is assumed to be demultiplexed by the sequencing facility. Batch processing scripts are provided to run processes on directories of demultiplexed sequence files.
 

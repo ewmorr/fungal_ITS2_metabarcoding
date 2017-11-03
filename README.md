@@ -15,8 +15,8 @@ I have not made much attempt to remove the "tutorial-esque" language in this doc
 
 
 
-Required software:
-For removal of MiSeq adaptors
+Required software:\n
+For removal of MiSeq adaptors\n
 Trimmomatic-0.33 <http://www.usadellab.org/cms/?page=trimmomatic>
 
 For read merging, quality filtering, sequence dereplicating, and clustering

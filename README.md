@@ -268,7 +268,7 @@ tail batch_filtered_len_dist.txt
 
 ##### Step 4. Filter by sequence length
 
-**From this step we will proceed with the concatenated sample file only, rather than processing both the single sample and the concatenated file.
+**From this step we will proceed with the concatenated sample file only, rather than processing both the single sample and the concatenated file.**
  
 It is common practice in metabarcoding studies to remove sequences below a certain length threshold based on the expected length of the biological sequence, and the expected length output of the sequencer. Here we use a minimum sequence length cutoff of 150 bp:
 

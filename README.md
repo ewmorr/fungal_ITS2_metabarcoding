@@ -6,7 +6,7 @@ Description: Pipeline for processing MiSeq paired-end read data for fungal meta-
 
 
 ##########################################################################################
-##### NOTE
+#### NOTE
 
 This document is based on a tutorial I put together for novices to metabarcoding. The tutorial used a set of example files to work through the basic process using data from one sample (example_sample_1), or a set of two files to be processed together. 
 I have not made much attempt to remove the "tutorial-esque" language in this document, so please excuse if it reads at a basic level.
@@ -15,23 +15,23 @@ I have not made much attempt to remove the "tutorial-esque" language in this doc
 
 
 
-#### Required software:
+### Required software:
 
-##### For removal of MiSeq adaptors
+#### For removal of MiSeq adaptors
 
 Trimmomatic-0.33 <http://www.usadellab.org/cms/?page=trimmomatic>
 
-##### For read merging, quality filtering, sequence dereplicating, and clustering
+#### For read merging, quality filtering, sequence dereplicating, and clustering
 
 Usearch v. 10.0 <http://www.drive5.com/usearch/>
 
 - or latest version. usearch is updated frequently and this code was last tested with version 10, and originally written with v. 8 in mind. Some commands may need update.
 
-##### For ITS region extraction
+#### For ITS region extraction
 
 ITSx  v. 1.0.7 <http://microbiology.se/software/itsx/>
 
-##### Perl scripts
+#### Perl scripts
 
 -trimmomaticPrimerBuild.pl
 -batchTrimmomatic.pl
@@ -66,7 +66,7 @@ We’ll need the UNITE dynamically clustered reference database and a working in
 For the purpose of this tutorial we will work with the sequence data files for samples “example_sample_1” and “example_sample_2.” We start with the example_sample_1 read files in a directory called “miseq_test” and the sequence files for both samples in a directory called “miseq_test_batch.” The sample barcode list is provided in the file “miseq_test_primers.txt.” We will enter the commands to process the single sample data files for illustration purposes, but most experiments will have many samples that need to be processed. The batch processing scripts are designed to run each process on multiple sample files so that the user is saved tedious typing etc. 
 
 
-##### Step 1. Remove adaptors
+#### Step 1. Remove adaptors
 
 This step removes sequencing adaptors and PCR primers from sequence reads. Sample barcodes can interfere with down-stream processing (especially read merging, ITS extraction, and clustering) as barcodes and adaptors are arbitrary sequences with respect to the biological sequence information. Note that the sequences are demultiplexed coming off of the sequencer, but there may be cases where we sequenced through the primers at the opposite end of the read, or primers remain for other reasons.
 
@@ -130,7 +130,7 @@ Adaptor trimming can be run on a directory of fastq files using the script batch
 perl scripts/batchTrimmomatic.pl miseq_test_batch/ miseq_test_primers_dir/
 ```
 
-##### Checking numbers of sequences in fastq files:
+#### Checking numbers of sequences in fastq files:
 
 The number of sequences in each fastq file can be counted using ‘cat’:
 
@@ -149,7 +149,7 @@ perl scripts/batch_count_fastq_entries.pl miseq_test_batch_trim/  trimmed_counts
 less trimmed_counts.txt
 ```
 
-##### Step 2. Merge reads
+#### Step 2. Merge reads
 
 There are several programs available for read merging; we will use usearch (Edgar 2013) here. The usearch author provides some strong rationale for his approach (Edgar & Flyvbjerg 2015, http://drive5.com/usearch/manual/merge_pair.html, http://drive5.com/usearch/manual/quality_score.html), and we use the program in other parts of the pipeline. The command for a pair of files:
 
@@ -188,7 +188,7 @@ cat miseq_test_batch_trim_merged/*/*.join.fastq > merged_batch.fastq
 usearch10 -fastq_eestats2 merged_batch.fastq
 ```
 
-##### Step 3. Quality filtering
+#### Step 3. Quality filtering
 
 Some rationale for our approach:
 
@@ -266,9 +266,9 @@ head batch_filtered_len_dist.txt
 tail batch_filtered_len_dist.txt
 ```
 
-##### Step 4. Filter by sequence length
+#### Step 4. Filter by sequence length
 
-**From this step we will proceed with the concatenated sample file only, rather than processing both the single sample and the concatenated file.**
+*From this step we will proceed with the concatenated sample file only, rather than processing both the single sample and the concatenated file.*
  
 It is common practice in metabarcoding studies to remove sequences below a certain length threshold based on the expected length of the biological sequence, and the expected length output of the sequencer. Here we use a minimum sequence length cutoff of 150 bp:
 
@@ -286,7 +286,7 @@ grep ">" miseq_test_batch_trim_merged_usearchFilter/seqs_ge_150.fasta | wc
 grep ">" miseq_test_batch_trim_merged_usearchFilter/seqs_lt_150.fasta | wc
 ```
 
-##### Step 5. Dereplicate sequences
+#### Step 5. Dereplicate sequences
 
 At this stage we perform our first sequence-clustering step. The goal here is to combine all of the sequences that are exactly the same, resulting in a fasta file containing all of the unique sequences, as well as a map (“uc” file in usearch parlance) that describes which sequences were matched. One desirable outcome from dereplicating is that we significantly reduce the size of the dataset for downstream processing. This will be important for the next step, ITS extraction, which is demanding in terms of computer time. To dereplicate with usearch:
 
@@ -299,7 +299,7 @@ grep ">" miseq_test_batch_trim_merged_usearchFilter/seqs_ge_150.derep.fasta | wc
 
 The fasta file output will be used as input for the ITS extraction step, while the uc file will be used later to assemble an OTU map.
 
-##### Step 6. ITS extraction
+#### Step 6. ITS extraction
 
 This step involves using Hidden Markov Model (HMM) searches to find sequences with homology to known 5.8S and LSU sequences, then trim these returning the ITS2 region. Input is the dereplicated sequence file and output is written to the specified directory.
 
@@ -331,7 +331,7 @@ mv miseq_test_batch_ITSx* ./miseq_test_batch_ITSx/
 
 The ‘--cpu’ flag sets the number of CPU cores used by the program. On machines without multiple cores this should be left out of the command, but runtime will be increased significantly. The ‘-E’ flag sets the E-value cutoff for identifying a conserved sequence region (i.e. 5.8S and LSU in our case). The default setting is 10^-5 (lower values are more stringent), and running with 0.001 allows us to retain more sequences at the expense of potentially including false positive matches. Assuming we have a done a good job quality filtering and intend to remove unwanted taxa (e.g. plants) after taxonomic identification this should not be too much of a problem. Additionally, running with a stringent E-value cutoff may artificially reduce the dataset if we assume our dataset includes some previously unobserved sequences that may not have a good 5.8S or LSU match in the HMM search database. The user should make their own decision here based on the goals of the study, and philosophy regarding “unknowns.” It is important to check the number of sequences retained at this stage (in the .ITS2.fasta file) as large numbers of sequences can be discarded if parameters are set improperly.
 
-##### Step 7. OTU clustering
+#### Step 7. OTU clustering
 
 We will now cluster the extracted ITS2 sequences into OTUs based on sequence similarity. This is done in usearch v. 8 using several steps. First we sort by cluster size to allow clustering in usearch:
 
@@ -365,7 +365,7 @@ usearch10 -usearch_global miseq_test_batch_cluster/seqs.sorted.fasta -db miseq_t
 
 The input to this function is the original list of dereplicated and ITS-extracted sequences, which is compared to the database of OTU representative sequences generated in the previous command. Essentially, in this step the original sequences are re-clustered by comparing to the representative sequences. Ideally we would run this function with the full list of sequences before dereplication, ITS extraction, and quality filtering (see http://drive5.com/usearch/manual/mapreadstootus.html for an explanation), but the need for ITS extraction precludes this approach for two reasons. First, and most importantly, running ITSx on reads that have not been quality filtered will result in many reads failing the homology search due to poor quality scores (leaving us discarding reads for unknown reasons as ITSx may also discard good reads with poor matches). Second, running ITSx on the full dataset takes considerably longer and may be untenable for very large datasets (without access to high computing power). The reads before ITS extraction may not map well (or at all) to the cluster representative sequences as they contain sequences of the 5.8S and LSU.
 
-##### Step 8. Build OTU map
+#### Step 8. Build OTU map
 
 We can build an OTU map using the uc files generated during the sequence mapping step and the dereplication step using a perl script.
 
@@ -390,7 +390,7 @@ grep ">" miseq_test_batch_cluster/rep_set.qiimeStyle.fasta | wc
 wc -l miseq_test_batch_cluster/otus.qiimeStyle.txt
 ```
 
-##### Step 9. Assign taxonomy and make OTU table
+#### Step 9. Assign taxonomy and make OTU table
 
 The most common way to organize OTU by sample data for downstream analyses is in an “OTU table,” which is a table of sequence counts for each OTU (in rows) in each sample (in columns). The table often includes additional data provided in the column following the last sample, like a taxonomy string for each OTU. We will use QIIME to assign taxonomy by comparing our representative sequences to the UNITE reference database (Kõljalg et al. 2013) using blast. 
 Please note that the UNITE database is a curated database of fungal ITS sequences. This means that most of the sequences in UNITE should be robust in terms of their identification and accuracy. BUT, the database may be missing species of fungi that are important in a specific dataset. AND, the database does not include anything other than fungi. If there is a possibility the primers used picked up something besides fungi (they probably did) then the sequences should also be compared to a comprehensive database like a recent version of the NCBI non-redundant nucleotide database, and positive matches to things like plants and animals should be removed. I usually accomplish this using blast, the program MEGAN, and perl scripts, and can provide that workflow if necessary.
@@ -424,7 +424,7 @@ less miseq_test_batch_qiime/otu_table.txt
 
 The sequence data is now ready for downstream processing! Probably the most straight forward way to proceed is using QIIME, which has excellent documentation and many convenient scripts for subsampling sequences, calculating alpha-diversity and beta-diversity metrics, summing OTU sequence counts or relative abundance at various taxonomic levels, and some basic statistics functions. The ‘vegan’ package (Oksanen et al. 2015) in R is one of many R packages that also has some excellent analysis tools, but note that for most R functions the OTU table must be transposed.
 
-##### References:
+#### References:
 
 Caporaso JG, et al. (2010). QIIME allows analysis of high-throughput community sequencing data. Nature Methods 7(5): 335-336.
 

@@ -6,7 +6,7 @@ Description: Pipeline for processing MiSeq paired-end read data for fungal meta-
 
 
 ##########################################################################################
-										###NOTE###
+###### NOTE
 
 This document is based on a tutorial I put together for novices to metabarcoding. The tutorial used a set of example files to work through the basic process using data from one sample (example_sample_1), or a set of two files to be processed together. 
 I have not made much attempt to remove the "tutorial-esque" language in this document, so please excuse if it reads at a basic level.

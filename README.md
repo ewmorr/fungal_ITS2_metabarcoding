@@ -25,7 +25,7 @@ Trimmomatic-0.33 <http://www.usadellab.org/cms/?page=trimmomatic>
 
 Usearch v. 10.0 <http://www.drive5.com/usearch/>
 
--or latest version. usearch is updated frequently and this code was last tested with version 10, and originally written with v. 8 in mind. Some commands may need update.
+- or latest version. usearch is updated frequently and this code was last tested with version 10, and originally written with v. 8 in mind. Some commands may need update.
 
 ##### For ITS region extraction
 

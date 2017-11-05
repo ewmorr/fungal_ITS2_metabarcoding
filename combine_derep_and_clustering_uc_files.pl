@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# getAllSeqsMothurOTUs.pl
+# combine_derep_and_clustering_uc_files.pl
 # Eric Morrison
 # 6/08/2017
 # Usage: combine_derep_and_clustering_uc_files.pl [cluster_results.uc] [derep.uc] [ouput.txt]

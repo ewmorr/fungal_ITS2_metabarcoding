@@ -2,7 +2,7 @@
 # getAllSeqsMothurOTUs.pl
 # Eric Morrison
 # 6/08/2017
-# Usage: getAllSeqsMothurOTUs.pl [cluster_results.uc] [derep.uc] [ouput.txt]
+# Usage: combine_derep_and_clustering_uc_files.pl [cluster_results.uc] [derep.uc] [ouput.txt]
 #
 # This script reads a uc formatted file from usearch and
 # and a derep uc file.
@@ -15,7 +15,7 @@ use warnings;
 
 sub usage(){
 	print STDERR q(
-Usage: perl getAllSeqsMothurOTUs.pl [cluster_results.uc] [derep.uc] [output.txt]
+Usage: perl combine_derep_and_clustering_uc_files.pl [cluster_results.uc] [derep.uc] [output.txt]
 
 This script reads two usearch .uc files, the first from a final clustering, and the second from dereplication. The script searches sequence id's in each file to find the sequences that belong to OTUs and print OTUs in a mothur format OTU file.
 

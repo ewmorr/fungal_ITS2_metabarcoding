@@ -37,8 +37,8 @@ ITSx  v. 1.0.7 <http://microbiology.se/software/itsx/>
 - batchTrimmomatic.pl
 - batch_count_fastq_entries.pl
 - fastaLengthDistribtuion.pl
-- batch_join_paired_ends_usearch8.pl
-- batch_filter_usearch.pl
+- batch_join_paired_ends_usearch10.pl
+- batch_filter_usearch10.pl
 - rmlt150.pl
 - combine_derep_and_clustering_uc_files.pl
 - writeQiimeStyleRepSet.pl
@@ -51,13 +51,13 @@ We’ll need the UNITE dynamically clustered reference database and a working in
 **Pipeline flow:**
 
 1. Remove adaptors (Trimmomatic, trimmomaticPrimerBuild.pl, batchTrimmomatic.pl)
-2. Merge paired end reads (usearch8, batch_join_paired_ends_usearch8.pl) 
-3. Quality filter reads (usearch8, batch_filter_usearch.pl)
+2. Merge paired end reads (usearch10, batch_join_paired_ends_usearch10.pl) 
+3. Quality filter reads (usearch10, batch_filter_usearch10.pl)
 4. Filter by length; recommended minimum length 150bp (rmlt150.pl)
-5. Dereplicate sequences (usearch8)
+5. Dereplicate sequences (usearch10)
 6. Extract ITS region (ITSx)
-7. Cluster sequences; recommended 97% sequence similarity (usearch8)
-8. Build OTU map file for input into QIIME or other software (getAllSeqsMothurOTUs.pl)
+7. Cluster sequences; recommended 97% sequence similarity (usearch10)
+8. Build OTU map file for input into QIIME or other software (combine_derep_and_clustering_uc_files.pl)
 9. Assign taxonomy and make OTU table (QIIME)
 
 **Note:** The original sequence files used for input to this pipeline are assumed to be in gzipped fastq or fastq format (file extension .fastq.gz or .fastq). For batch processing it is assumed that file names include the sample identifiers associated with each barcode, and include the designation “R1” or “R2” for reverse or forward reads (this is standard for paired-end MiSeq data). Also, IT IS ALWAYS A GOOD IDEA TO CHECK THE NUMBER OF SEQUENCES REMAINING AFTER PROCESSING STEPS, especially steps that involve quality filtering, to see that the number of sequences retained matches expectations.  For steps that may affect the length distribution of sequences (e.g. read merging) sequence length distribution should also be examined.
@@ -373,7 +373,7 @@ We can build an OTU map using the uc files generated during the sequence mapping
 perl repo/fungal_ITS2_metabarcoding/combine_derep_and_clustering_uc_files.pl miseq_test_batch_cluster/cluster_results.uc miseq_test_batch_trim_merged_usearchFilter/seqs_ge_150.derep.uc miseq_test_batch_cluster/otus.txt
 ```
 
-The script uses the two uc files to create an OTU map by searching for sequence ID’s that were clustered together. The output is written in the format of the mothur (Schloss et al. 2009) OTU map file, which was also adopted by QIIME (Caporasao et al. 2010) as a standard OTU map format. At this point we can remove the “barcodelabel=” portion of the sequence identifiers in the rep_set.fasta file and the OTU map file to be consistent with QIIME/mother format.
+The script uses the two uc files to create an OTU map by searching for sequence ID’s that were clustered together. The output is written in the format of the mothur (Schloss et al. 2009) OTU map file, which was also adopted by QIIME (Caporasao et al. 2010) as a standard OTU map format. At this point we can remove the “barcodelabel=” portion of the sequence identifiers in the rep_set.fasta file and the OTU map file to be consistent with QIIME/mothur format.
 
 ```
 #Rewrite fasta and OTU file to QIIME style sequence ID format

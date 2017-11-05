@@ -33,16 +33,16 @@ ITSx  v. 1.0.7 <http://microbiology.se/software/itsx/>
 
 #### Perl scripts
 
-- trimmomaticPrimerBuild.pl
-- batchTrimmomatic.pl
-- batch_count_fastq_entries.pl
-- fastaLengthDistribtuion.pl
-- batch_join_paired_ends_usearch10.pl
-- batch_filter_usearch10.pl
-- rmlt150.pl
-- combine_derep_and_clustering_uc_files.pl
-- writeQiimeStyleRepSet.pl
-- writeQiimeStyleOtuFile.pl
+- [trimmomaticPrimerBuild.pl](trimmomaticPrimerBuild.pl)
+- [batchTrimmomatic.pl](batchTrimmomatic.pl)
+- [batch_count_fastq_entries.pl](batch_count_fastq_entries.pl)
+- [fastaLengthDistribtuion.pl](fastaLengthDistribtuion.pl)
+- [batch_join_paired_ends_usearch10.pl](batch_join_paired_ends_usearch10.pl)
+- [batch_filter_usearch10.pl](batch_filter_usearch10.pl)
+- [rmlt150.pl](rmlt150.pl)
+- [combine_derep_and_clustering_uc_files.pl](combine_derep_and_clustering_uc_files.pl)
+- [writeQiimeStyleRepSet.pl](writeQiimeStyleRepSet.pl)
+- [writeQiimeStyleOtuFile.pl](writeQiimeStyleOtuFile.pl)
 
 **Additionally:**
 

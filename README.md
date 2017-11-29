@@ -132,7 +132,7 @@ perl scripts/batchTrimmomatic.pl miseq_test_batch/ miseq_test_primers_dir/
 
 #### Checking numbers of sequences in fastq files:
 
-The number of sequences in each fastq file can be counted using ‘cat’:
+The number of sequences in each fastq file can be counted using ‘wc’:
 
 ```
 expr $(cat miseq_test_batch_trim/example_sample_1/example_sample_1_S10_L001_R1pair.fastq | wc -l) / 4
